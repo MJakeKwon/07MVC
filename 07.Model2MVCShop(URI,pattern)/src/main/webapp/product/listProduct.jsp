@@ -118,7 +118,7 @@
 				<td></td>
 				<td align="left">
 				<c:choose>
-				<c:when test="${menu eq 'manage' }">
+				<c:when test="${param.menu eq 'manage' }">
 				<a href="/product/updateProduct?prodNo=${product.prodNo}&menu=${param.menu }">${product.prodName}</a>
 				</c:when>
 				<c:otherwise>
@@ -130,10 +130,36 @@
 				<td></td>
 				<td align="left">${product.regDate}</td>
 				<td></td>
-				<td align="left">
-						판매중
-						</td>
-				</tr>
+				
+				<c:if test="${user.role == 'admin'}">
+				    <c:choose>
+				        <c:when test="${product.proTranCode == '0'}">
+				            <td align="left">판매중</td>
+				        </c:when>
+				        <c:when test="${product.proTranCode == '1'}">
+				            <td align="left">결제완료
+				                <a href="/purchase/updateTranCode?tranNo=${product.tranNo}&tranCode=2">배송하기</a>
+				            </td>
+				        </c:when>
+				        <c:when test="${product.proTranCode == '2'}">
+				            <td align="left">배송중</td>
+				        </c:when>
+				        <c:when test="${product.proTranCode == '3'}">
+				            <td align="left">배송완료</td>
+				        </c:when>
+				    </c:choose>
+				</c:if>
+				
+				<c:if test="${user.role != 'admin'}">
+				    <c:choose>
+				        <c:when test="${product.proTranCode == '0'}">
+				            <td align="left">판매중</td>
+				        </c:when>
+				        <c:otherwise>
+				            <td align="left">재고없음</td>
+				        </c:otherwise>
+				    </c:choose>
+				</c:if>
 				
 				<tr>
 				<td colspan="11" bgcolor="D6D7D6" height="1"></td>
